@@ -1,7 +1,7 @@
 #include "binary_trees.h"
 /**
  * calc_size - calculates size
- * @node: the node
+ * @tree: the node
  * @size: pointer to size
  * Return: void
  */
