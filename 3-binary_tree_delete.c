@@ -6,16 +6,12 @@
  */
 void binary_tree_delete(binary_tree_t *tree)
 {
-	binary_tree_t *ptr;
-
 	if (tree)
 	{
-		ptr = tree;
-
 		if (ptr->left)
 			binary_tree_delete(ptr->left);
 		if (ptr->right)
 			binary_tree_delete(ptr->right);
-		free(ptr);
+		free(tree);
 	}
 }
