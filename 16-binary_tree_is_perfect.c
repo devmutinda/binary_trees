@@ -38,13 +38,29 @@ void check_full(const binary_tree_t *tree, int *f)
 	}
 }
 /**
+ * new_size - calculates size
+ * @tree: the node
+ * @size: pointer to size
+ * Return: void
+ */
+void new_size(const binary_tree_t *tree, int *size)
+{
+	if (tree)
+	{
+		new_size(tree->left, size);
+		new_size(tree->right, size);
+		(*size)++;
+	}
+}
+
+/**
  * binary_tree_is_perfect - checks if a binary tree is perfect
  * @tree: pointer to the root node of the tree to check
  * Return: 1 if true, 0 otherwise
  */
 int binary_tree_is_perfect(const binary_tree_t *tree)
 {
-	int full = 1, left_h, right_h, bf, perfect;
+	int full = 1, left_h, right_h, bf, perfect, size = 0;
 
 	if (!tree)
 		return (0);
@@ -52,9 +68,10 @@ int binary_tree_is_perfect(const binary_tree_t *tree)
 	check_full(tree, &full);
 	left_h = binary_height(tree->left);
 	right_h = binary_height(tree->right);
+	new_size(tree, &size);
 
 	bf = left_h - right_h;
-	if (full && !bf)
+	if (full && !bf && (size % 2))
 		perfect = 1;
 	else
 		perfect = 0;
