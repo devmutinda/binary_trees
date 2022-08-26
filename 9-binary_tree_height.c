@@ -11,10 +11,10 @@ void calc_height(const binary_tree_t *ptr, size_t *h)
 	{
 		if (ptr->left || ptr->right)
 			(*h)++;
-		if (ptr->left && ptr->right)
-			(*h)--;
-		calc_height(ptr->left, h);
-		calc_height(ptr->right, h);
+		if (ptr->left)
+			calc_height(ptr->left, h);
+		else
+			calc_height(ptr->right, h);
 	}
 }
 /**
