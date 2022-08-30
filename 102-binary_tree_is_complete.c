@@ -1,35 +1,31 @@
 #include "binary_trees.h"
 /**
- * check_complete - checks if a binary tree is complete
- * @tree: pointer to the root node of the tree to check
- * @status: the status
- * Return: int
+ * count_nodes - counts nodes
+ * @tree: pointer to node
+ * Return: number of nodes
  */
-int check_complete(const binary_tree_t *tree, int *status)
+int count_nodes(const binary_tree_t *tree)
 {
-	int left, right;
-
 	if (!tree)
 		return (0);
-	if (!tree->left && !tree->right)
+	return (count_nodes(tree->left) + count_nodes(tree->right) + 1);
+}
+/**
+ * check_complete - ckecks if tree is complete
+ * @tree: pointer to tree
+ * @index: index of node
+ * @nodes: number of nodes
+ * Return: 1 if complete, 0 otherwise
+ */
+int check_complete(const binary_tree_t *tree, int index, int nodes)
+{
+	if (!tree)
+		return (1);
+	if (index >= nodes)
 		return (0);
 
-	left = check_complete(tree->left, status) + 1;
-	right = check_complete(tree->right, status) + 1;
-
-	if (!tree->left && tree->right)
-		*status = 0;
-	else if (!tree->right && tree->parent->right->left &&
-			tree == tree->parent->left)
-		*status = 0;
-	if (right > left)
-	{
-		*status = 0;
-		return (right);
-	}
-	else
-		return (left);
-
+	return (check_complete(tree->left, 2 * index + 1, nodes) &&
+			check_complete(tree->right, 2 * index + 2, nodes));
 }
 /**
  * binary_tree_is_complete - checks if a binary tree is complete
@@ -38,11 +34,10 @@ int check_complete(const binary_tree_t *tree, int *status)
  */
 int binary_tree_is_complete(const binary_tree_t *tree)
 {
-	int status = 1, height;
+	int nodes, index = 0, status;
 
-	height = check_complete(tree, &status);
-	if (!height)
-		return (1);
+	nodes = count_nodes(tree);
+	status = check_complete(tree, index, nodes);
 
 	return (status);
 }
