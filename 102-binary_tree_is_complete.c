@@ -36,6 +36,8 @@ int binary_tree_is_complete(const binary_tree_t *tree)
 {
 	int nodes, index = 0, status;
 
+	if (!tree)
+		return (0);
 	nodes = count_nodes(tree);
 	status = check_complete(tree, index, nodes);
 
