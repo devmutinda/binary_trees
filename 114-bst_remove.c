@@ -82,14 +82,17 @@ bst_t *remover(bst_t *tree, int value)
 		}
 		}
 		else
-			success = tree;
+		{
+			if (tree->parent->left == tree)
+				tree->parent->left = NULL;
+			else
+				tree->parent->right = NULL;
+			success = tree->parent;
+		}
 
 		free(tree);
-		if (!success->parent)
-			return (success);
 		while (success->parent)
 			success = success->parent;
-
 		return (success);
 	}
 
