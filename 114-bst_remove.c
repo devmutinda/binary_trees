@@ -67,6 +67,8 @@ bst_t *remover(bst_t *tree, int value)
 
 	if (tree->n == value)
 	{
+		if (tree->right || tree->left)
+		{
 		success = find_successor(tree);
 		if (success)
 			process_success(success, tree);
@@ -78,6 +80,9 @@ bst_t *remover(bst_t *tree, int value)
 			else
 				tree->parent->right = NULL;
 		}
+		}
+		else
+			success = tree;
 
 		free(tree);
 		if (!success->parent)
