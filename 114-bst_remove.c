@@ -46,16 +46,11 @@ void process_success(bst_t *success, bst_t *tree)
 		tree->left->parent = success;
 		success->left = tree->left;
 	}
-	else
-		success->left = NULL;
 	if (success != tree->right && tree->right)
 	{
 		tree->right->parent = success;
 		success->right = tree->right;
 	}
-	else
-		success->right = NULL;
-
 }
 /**
  * remover - removes node
