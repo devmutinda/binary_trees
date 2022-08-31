@@ -2,9 +2,10 @@
 /**
  * check_bst - checks if it's BST
  * @tree: binary tree
+ * @n: value of root node
  * Return: int
  */
-int check_bst(const binary_tree_t *tree)
+int check_bst(const binary_tree_t *tree, int n)
 {
 	if (!tree->left && !tree->right)
 	{
@@ -23,8 +24,11 @@ int check_bst(const binary_tree_t *tree)
 	{
 		return (0);
 	}
+	else if ((tree->n < n && (tree->left->n >= n || tree->right->n >= n))
+			|| (tree->n > n && (tree->left->n <= n || tree->right->n <= n)))
+		return (0);
 
-	return (check_bst(tree->left) && check_bst(tree->right));
+	return (check_bst(tree->left, n) && check_bst(tree->right, n));
 }
 /**
  * binary_tree_is_bst - checks if a binary tree is a valid Binary Search Tree
@@ -38,7 +42,7 @@ int binary_tree_is_bst(const binary_tree_t *tree)
 	if (!tree)
 		return (0);
 
-	status = check_bst(tree);
+	status = check_bst(tree, tree->n);
 
 	return (status);
 }
