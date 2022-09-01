@@ -11,11 +11,31 @@ binary_tree_t *binary_tree_rotate_right(binary_tree_t *tree)
 	if (!tree || !tree->left)
 		return (NULL);
 
-	parent = tree->left;
-	hold = parent->right;
 	temp = tree->parent;
-	parent->right = tree;
+	if (!tree->right && tree->left->right)
+	{
+		parent = tree->left->right;
+		hold = tree->left;
+		hold->right = parent->right;
+		hold->left = parent->left;
+		tree->left = NULL;
+		hold->parent = parent;
+		parent->left = hold;
+	}
+	else
+	{
+		parent = tree->left;
+		hold = parent->right;
+		if (hold)
+		{
+			hold->parent = tree;
+			tree->left = hold;
+		}
+		else
+			tree->left = NULL;
+	}
 	parent->parent = temp;
+	parent->right = tree;
 	tree->parent = parent;
 	if (temp)
 	{
@@ -24,13 +44,6 @@ binary_tree_t *binary_tree_rotate_right(binary_tree_t *tree)
 		else
 			temp->right = parent;
 	}
-	if (hold)
-	{
-		hold->parent = tree;
-		tree->left = hold;
-	}
-	else
-		tree->left = NULL;
 
 	return (parent);
 }
