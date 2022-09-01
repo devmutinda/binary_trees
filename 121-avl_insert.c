@@ -44,11 +44,11 @@ void balance_avl(avl_t *node)
 	}
 	else if (bf < -1)
 	{
-		binary_tree_rotate_left(node);
+		node = binary_tree_rotate_left(node);
 	}
 
-	balance_avl(node->left);
 	balance_avl(node->right);
+	balance_avl(node->left);
 	}
 }
 /**
@@ -78,6 +78,8 @@ avl_t *avl_insert(avl_t **tree, int value)
 	}
 
 	balance_avl(*tree);
+	while ((*tree)->parent)
+		*tree = (*tree)->parent;
 
 	return (new);
 }
