@@ -12,28 +12,15 @@ binary_tree_t *binary_tree_rotate_left(binary_tree_t *tree)
 		return (NULL);
 
 	temp = tree->parent;
-	if (!tree->left && tree->right->left)
+	parent = tree->right;
+	hold = parent->left;
+	if (hold)
 	{
-		parent = tree->right->left;
-		hold = tree->right;
-		hold->right = parent->right;
-		hold->left = parent->left;
-		tree->right = NULL;
-		hold->parent = parent;
-		parent->right = hold;
+		hold->parent = tree;
+		tree->right = hold;
 	}
 	else
-	{
-		parent = tree->right;
-		hold = parent->left;
-		if (hold)
-		{
-			hold->parent = tree;
-			tree->right = hold;
-		}
-		else
-			tree->right = NULL;
-	}
+		tree->right = NULL;
 	parent->parent = temp;
 	parent->left = tree;
 	tree->parent = parent;
