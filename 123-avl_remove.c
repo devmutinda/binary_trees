@@ -149,6 +149,8 @@ avl_t *avl_remove(avl_t *root, int value)
 
 	new = remover(root, value, &success);
 	balance_tree(new);
+	while (new->parent)
+		new = new->parent;
 
 	return (new);
 }
