@@ -44,7 +44,7 @@ heap_t *swap_nodes(heap_t *max, heap_t *min)
 	if (right)
 		right->parent = min;
 
-	return (max);
+	return (min->parent);
 }
 /**
  * get_nodes - calculates no of nodes
@@ -82,8 +82,12 @@ heap_t *insert_heap(heap_t *node, int value, heap_t *parent, heap_t **new)
 	if (!(node_l % 2) || node_l == node_r)
 		node->left = insert_heap(node->left, value, node, new);
 
-	else
+	else if (node_l == 1 || node_l == 3 || node_l == 7 || node_l == 15)
 		node->right = insert_heap(node->right, value, node, new);
+
+	else
+		node->left = insert_heap(node->left, value, node, new);
+
 
 	if (node->right)
 	{
