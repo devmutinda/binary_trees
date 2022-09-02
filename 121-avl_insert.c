@@ -1,35 +1,5 @@
 #include "binary_trees.h"
 /**
- * insert - inserts into BST
- * @node: pointer to root of BST
- * @value: value to be inserted
- * @parent: parent of node
- * @new: newly created node
- * Return: pointer to created node
- */
-avl_t *insert(avl_t *node, int value, avl_t *parent, avl_t **new)
-{
-	if (!node)
-	{
-		*new = binary_tree_node(parent, value);
-		if ((*new)->parent->n > (*new)->n)
-			(*new)->parent->left = *new;
-		else
-			(*new)->parent->right = *new;
-		return (*new);
-	}
-
-	if (node->n > value)
-		node->left = insert(node->left, value, node, new);
-
-	else if (node->n < value)
-		node->right = insert(node->right, value, node, new);
-
-	else
-		return (NULL);
-	return (balance_avl(node, value));
-}
-/**
  * balance_avl - balances the binary tree
  * @node: the node
  * @value: the value
@@ -63,6 +33,36 @@ avl_t *balance_avl(avl_t *node, int value)
 	}
 
 	return (node);
+}
+/**
+ * insert - inserts into BST
+ * @node: pointer to root of BST
+ * @value: value to be inserted
+ * @parent: parent of node
+ * @new: newly created node
+ * Return: pointer to created node
+ */
+avl_t *insert(avl_t *node, int value, avl_t *parent, avl_t **new)
+{
+	if (!node)
+	{
+		*new = binary_tree_node(parent, value);
+		if ((*new)->parent->n > (*new)->n)
+			(*new)->parent->left = *new;
+		else
+			(*new)->parent->right = *new;
+		return (*new);
+	}
+
+	if (node->n > value)
+		node->left = insert(node->left, value, node, new);
+
+	else if (node->n < value)
+		node->right = insert(node->right, value, node, new);
+
+	else
+		return (NULL);
+	return (balance_avl(node, value));
 }
 /**
  * avl_insert - inserts a value in an AVL Tree
