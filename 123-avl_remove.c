@@ -57,6 +57,41 @@ void process_success(avl_t *success, avl_t *tree)
 	}
 }
 /**
+ * balance_avl_rem - balances the binary tree
+ * @node: the node
+ * @value: the value
+ * Return: void
+ */
+avl_t *balance_avl_rem(avl_t *node, int value)
+{
+	int bf;
+
+	bf = binary_tree_balance(node);
+	/*Left left case*/
+	if (bf > 1 && value < node->left->n)
+		return (binary_tree_rotate_right(node));
+
+	/*Right right case*/
+	else if (bf < -1 && value > node->right->n)
+		return (binary_tree_rotate_left(node));
+
+	/*Left right case*/
+	else if (bf > 1 && value > node->left->n)
+	{
+		node->left = binary_tree_rotate_left(node->left);
+		return (binary_tree_rotate_right(node));
+	}
+
+	/*Right left case*/
+	else if (bf < -1 && value < node->right->n)
+	{
+		node->right = binary_tree_rotate_right(node->right);
+		return (binary_tree_rotate_left(node));
+	}
+
+	return (node);
+}
+/**
  * remover - removes node
  * @tree: pointer to tree
  * @value: value to be removed
@@ -93,7 +128,7 @@ avl_t *remover(avl_t *tree, int value, avl_t **success)
 		tree->right = remover(tree->right, value, success);
 	else
 		return (NULL);
-	return (balance_avl(tree, value));
+	return (balance_avl_rem(tree, value));
 }
 /**
  * avl_remove - removes a node from an AVL tree
