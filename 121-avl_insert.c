@@ -4,27 +4,26 @@
  * @node: pointer to root of BST
  * @value: value to be inserted
  * @parent: parent of node
+ * @new: newly created node
  * Return: pointer to created node
  */
-avl_t *insert(avl_t *node, int value, avl_t *parent)
+avl_t *insert(avl_t *node, int value, avl_t *parent, avl_t **new)
 {
-	avl_t *new;
-
 	if (!node)
 	{
-		new = binary_tree_node(parent, value);
-		if (new->parent->n > new->n)
-			new->parent->left = new;
+		*new = binary_tree_node(parent, value);
+		if ((*new)->parent->n > (*new)->n)
+			(*new)->parent->left = *new;
 		else
-			new->parent->right = new;
-		return (new);
+			(*new)->parent->right = *new;
+		return (*new);
 	}
 
 	if (node->n > value)
-		node->left = insert(node->left, value, node);
+		node->left = insert(node->left, value, node, new);
 
 	else if (node->n < value)
-		node->right = insert(node->right, value, node);
+		node->right = insert(node->right, value, node, new);
 
 	else
 		return (NULL);
@@ -82,9 +81,7 @@ avl_t *avl_insert(avl_t **tree, int value)
 		return (*tree);
 	}
 
-	new = insert(*tree, value, new);
-	while ((*tree)->parent)
-		*tree = (*tree)->parent;
+	*tree = insert(*tree, value, new, &new);
 
 	return (new);
 }
