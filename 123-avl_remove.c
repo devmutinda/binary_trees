@@ -57,38 +57,42 @@ void process_success(avl_t *success, avl_t *tree)
 	}
 }
 /**
- * balance_avl_rem - balances the binary tree
+ * balance_tree - balances the binary tree
  * @node: the node
  * Return: void
  */
-avl_t *balance_avl_rem(avl_t *node)
+void balance_tree(avl_t *node)
 {
 	int bf;
 
+	if (node)
+	{
 	bf = binary_tree_balance(node);
 	/*Left left case*/
 	if (bf > 1 && binary_tree_balance(node->left) >= 0)
-		return (binary_tree_rotate_right(node));
+		binary_tree_rotate_right(node);
 
 	/*Right right case*/
 	else if (bf < -1 && binary_tree_balance(node->right) <= 0)
-		return (binary_tree_rotate_left(node));
+		binary_tree_rotate_left(node);
 
 	/*Left right case*/
 	else if (bf > 1 && binary_tree_balance(node->left) < 0)
 	{
-		node->left = binary_tree_rotate_left(node->left);
-		return (binary_tree_rotate_right(node));
+		binary_tree_rotate_left(node->left);
+		binary_tree_rotate_right(node);
 	}
 
 	/*Right left case*/
 	else if (bf < -1 && binary_tree_balance(node->right) > 0)
 	{
-		node->right = binary_tree_rotate_right(node->right);
-		return (binary_tree_rotate_left(node));
+		binary_tree_rotate_right(node->right);
+		binary_tree_rotate_left(node);
 	}
+	balance_tree(node->left);
+	balance_tree(node->right);
 
-	return (node);
+	}
 }
 /**
  * remover - removes node
@@ -128,7 +132,7 @@ avl_t *remover(avl_t *tree, int value, avl_t **success)
 	else
 		return (NULL);
 
-	return (balance_avl_rem(tree));
+	return (tree);
 }
 /**
  * avl_remove - removes a node from an AVL tree
@@ -144,6 +148,7 @@ avl_t *avl_remove(avl_t *root, int value)
 		return (NULL);
 
 	new = remover(root, value, &success);
+	balance_tree(new);
 
 	return (new);
 }
