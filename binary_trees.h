@@ -68,5 +68,6 @@ bst_t *bst_remove(bst_t *root, int value);
 /*AVL Prototype Declarations*/
 int binary_tree_is_avl(const binary_tree_t *tree);
 avl_t *avl_insert(avl_t **tree, int value);
+avl_t *balance_avl(avl_t *node, int value);
 
 #endif

@@ -1,55 +1,69 @@
 #include "binary_trees.h"
 /**
  * insert - inserts into BST
- * @tree: pointer to root of BST
+ * @node: pointer to root of BST
  * @value: value to be inserted
  * @parent: parent of node
  * Return: pointer to created node
  */
-avl_t *insert(avl_t *tree, int value, avl_t *parent)
+avl_t *insert(avl_t *node, int value, avl_t *parent)
 {
-	if (!tree)
+	avl_t *new;
+
+	if (!node)
 	{
-		return (binary_tree_node(parent, value));
+		new = binary_tree_node(parent, value);
+		if (new->parent->n > new->n)
+			new->parent->left = new;
+		else
+			new->parent->right = new;
+		return (new);
 	}
-	if (tree->n > value)
-	{
-		parent = tree;
-		return (insert(tree->left, value, parent));
-	}
-	else if (tree->n < value)
-	{
-		parent = tree;
-		return (insert(tree->right, value, parent));
-	}
+
+	if (node->n > value)
+		node->left = insert(node->left, value, node);
+
+	else if (node->n < value)
+		node->right = insert(node->right, value, node);
 
 	else
 		return (NULL);
+	return (balance_avl(node, value));
 }
 /**
  * balance_avl - balances the binary tree
  * @node: the node
+ * @value: the value
  * Return: void
  */
-void balance_avl(avl_t *node)
+avl_t *balance_avl(avl_t *node, int value)
 {
 	int bf;
 
-	if (node)
-	{
 	bf = binary_tree_balance(node);
-	if (bf > 1)
+	/*Left left case*/
+	if (bf > 1 && value < node->left->n)
+		return (binary_tree_rotate_right(node));
+
+	/*Right right case*/
+	else if (bf < -1 && value > node->right->n)
+		return (binary_tree_rotate_left(node));
+
+	/*Left right case*/
+	else if (bf > 1 && value > node->left->n)
 	{
-		binary_tree_rotate_right(node);
-	}
-	else if (bf < -1)
-	{
-		node = binary_tree_rotate_left(node);
+		node->left = binary_tree_rotate_left(node->left);
+		return (binary_tree_rotate_right(node));
 	}
 
-	balance_avl(node->right);
-	balance_avl(node->left);
+	/*Right left case*/
+	else if (bf < -1 && value < node->right->n)
+	{
+		node->right = binary_tree_rotate_right(node->right);
+		return (binary_tree_rotate_left(node));
 	}
+
+	return (node);
 }
 /**
  * avl_insert - inserts a value in an AVL Tree
@@ -69,15 +83,6 @@ avl_t *avl_insert(avl_t **tree, int value)
 	}
 
 	new = insert(*tree, value, new);
-	if (new)
-	{
-	if (new->parent->n > new->n)
-		new->parent->left = new;
-	else
-		new->parent->right = new;
-	}
-
-	balance_avl(*tree);
 	while ((*tree)->parent)
 		*tree = (*tree)->parent;
 
