@@ -18,6 +18,8 @@ avl_t *insert_sorted(avl_t *node, avl_t *parent, int *array, int l, int r)
 		return (NULL);
 
 	node = binary_tree_node(parent, array[mid]);
+	if (!node)
+		return (NULL);
 
 	node->left = insert_sorted(node->left, node, array, l, mid - 1);
 	node->right = insert_sorted(node->right, node, array, mid + 1, r);
