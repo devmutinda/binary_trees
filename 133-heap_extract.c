@@ -130,12 +130,8 @@ int heap_extract(heap_t **root)
 	if (!(*root))
 		return (0);
 	value = (*root)->n;
-	if (!(*root)->left && !(*root)->right)
-	{
-		binary_tree_delete(*root);
-		*root = NULL;
-	}
-	else
+
+	if ((*root)->left || (*root)->right)
 	{
 		height = get_height(*root);
 		get_new_node(*root, height, &new);
@@ -157,11 +153,14 @@ int heap_extract(heap_t **root)
 			new->left->parent = new;
 		if (new->right)
 			new->right->parent = new;
-		(*root)->left = NULL;
-		(*root)->right = NULL;
-		binary_tree_delete(*root);
+		free(*root);
 		new = swap_elements(new);
 		*root = new;
+	}
+	else
+	{
+		free(*root);
+		*root = NULL;
 	}
 	return (value);
 }
