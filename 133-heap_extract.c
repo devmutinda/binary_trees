@@ -131,22 +131,37 @@ int heap_extract(heap_t **root)
 		return (0);
 
 	value = (*root)->n;
-	height = get_height(*root);
-	get_new_node(*root, height, &new);
-	new->left = (*root)->left;
-	new->right = (*root)->right;
+	if ((*root)->left || (*root)->right)
+	{
+		height = get_height(*root);
+		get_new_node(*root, height, &new);
+		if ((*root)->left == new)
+			new->left = NULL;
+		else
+			new->left = (*root)->left;
+		if ((*root)->right == new)
+			new->right = NULL;
+		else
+			new->right = (*root)->right;
 
-	if (new->parent->left == new)
-		new->parent->left = NULL;
+		if (new->parent->left == new)
+			new->parent->left = NULL;
+		else
+			new->parent->right = NULL;
+		new->parent = NULL;
+		if (new->left)
+			new->left->parent = new;
+		if (new->right)
+			new->right->parent = new;
+		free(*root);
+		new = swap_elements(new);
+		*root = new;
+	}
 	else
-		new->parent->right = NULL;
-	new->parent = NULL;
-	new->left->parent = new;
-	new->right->parent = new;
-	free(*root);
-	new = swap_elements(new);
+	{
+		free(*root);
+	}
 
-	*root = new;
 
 	return (value);
 }
