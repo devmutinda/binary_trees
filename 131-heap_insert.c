@@ -59,6 +59,28 @@ int get_nodes(const binary_tree_t *root)
 			get_nodes(root->right) + 1);
 }
 /**
+ * check_left - checks if left node is full
+ * @l : no of nodes in left node
+ * Return: 1 if true, 0 otherwise
+ */
+int check_left(int l)
+{
+	int new = 1;
+	int status = 0;
+
+	while (new <= l + 1)
+	{
+		new *= 2;
+		if (new == l + 1)
+		{
+			status = 1;
+			break;
+		}
+	}
+
+	return (status);
+}
+/**
  * insert_heap - inserts node into heap
  * @node: pointer to node
  * @value: value to be inserted
@@ -68,7 +90,7 @@ int get_nodes(const binary_tree_t *root)
  */
 heap_t *insert_heap(heap_t *node, int value, heap_t *parent, heap_t **new)
 {
-	int node_l, node_r;
+	int node_l, node_r, p;
 
 	if (!node)
 	{
@@ -78,13 +100,13 @@ heap_t *insert_heap(heap_t *node, int value, heap_t *parent, heap_t **new)
 
 	node_l = get_nodes(node->left);
 	node_r = get_nodes(node->right);
+	p = check_left(node_l);
 
 	if (!(node_l % 2) || node_l == node_r)
 		node->left = insert_heap(node->left, value, node, new);
 
-	else if (node_l == 1 || node_l == 3 || node_l == 7 || node_l == 15)
+	else if (p)
 		node->right = insert_heap(node->right, value, node, new);
-
 	else
 		node->left = insert_heap(node->left, value, node, new);
 
